@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  shiny:
+    build: ./containers/shiny
+    ports:
+      - 80:3838
+    volumes:
+      - ./app:/srv/shiny-server/
+      - ./logs:/var/log/shiny-server/
+      - ./data:/data/
+    command: ["/usr/bin/shiny-server"]
+    restart: always
+  redis:
+    build: ./containers/redis
+    env_file:
+      - .env
+    ports:
+      - 6379:6379
+    volumes:
+      - ./conf:/usr/local/etc/redis/
+      - ./:/local
+    tty: true
+    command: ["/entrypoint.sh"]
+    restart: always
+
